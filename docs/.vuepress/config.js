@@ -1,7 +1,8 @@
 module.exports = {
   "title": "易曦翰",
   "description": "花开亦花散",
-  "dest": "public",
+  // "base": './',
+  // "dest": "public",
   "locales": {
     '/': {
       lang: 'zh-CN'
@@ -58,7 +59,6 @@ module.exports = {
         ]
       }
     ],
-    subSidebar: 'auto',
     "sidebar": {
       "/docs/theme-reco/": [
         "",
@@ -99,22 +99,10 @@ module.exports = {
     "lastUpdated": "最后更新时间",
     "author": "易曦翰",
     "authorAvatar": "/avatar.png",
-    "record": "xxxx", // 备案号
+    "record": "xxxx",
     "startYear": "2017"
   },
   "markdown": {
     "lineNumbers": true
-  },
-  plugins: [
-    '@vuepress/last-updated',
-    {
-      transformer: (timestamp, lang) => {
-        // 不要忘了安装 moment
-        const moment = require('moment')
-        moment.locale(lang)
-        return moment(timestamp).fromNow()
-      }
-    }
-  
-  ]
+  }
 }
