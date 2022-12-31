@@ -5,7 +5,7 @@ const sidebar = require("./config/sidebar");
 
 module.exports = {
   // 标签
-  title: "易曦翰",
+  title: "摸鱼小屋",
   // 描述
   description: "花开亦花散",
   // head

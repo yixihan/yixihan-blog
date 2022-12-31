@@ -1,6 +1,6 @@
 ---
 home: true
-heroText: 欢迎来到易曦翰的小屋
+heroText: 欢迎来到易曦翰的摸鱼小屋
 tagline: 花开亦花散
 # heroImage: /hero.png
 # heroImageStyle: {
