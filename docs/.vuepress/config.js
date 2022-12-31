@@ -1,26 +1,18 @@
 const nav = require("./config/nav");
+const friendLink = require("./config/friendLink");
+const head = require("./config/head");
+const sidebar = require("./config/sidebar");
 
 module.exports = {
+  // 标签
   title: "易曦翰",
+  // 描述
   description: "花开亦花散",
-  // "dest": "public",
-  head: [
-    [
-      "link",
-      {
-        rel: "icon",
-        href: "/favicon.ico",
-      },
-    ],
-    [
-      "meta",
-      {
-        name: "viewport",
-        content: "width=device-width,initial-scale=1,user-scalable=no",
-      },
-    ],
-  ],
+  // head
+  head: head,
+  // 博客主题
   theme: "reco",
+  // 主题配置
   themeConfig: {
     // 导航栏配置
     nav: nav,
@@ -30,31 +22,29 @@ module.exports = {
     blogConfig: {
       category: {
         location: 2,
-        text: "Category",
+        text: "分类",
       },
       tag: {
         location: 3,
-        text: "Tag",
+        text: "标签",
       },
     },
     // 友链配置
-    friendLink: [],
+    friendLink: friendLink,
     // 自定义配置侧边栏
-    sidebar: {},
-    subSidebar: "auto", //在所有页面中启用自动生成子侧边栏，原 sidebar 仍然兼容,
-
+    sidebar: sidebar,
+    // 在所有页面中启用自动生成子侧边栏，原 sidebar 仍然兼容
+    subSidebar: "auto",
     search: true,
     searchMaxSuggestions: 10,
     lastUpdated: "最后更新时间",
+    // 作者信息
     author: "易曦翰",
     authorAvatar: "/yixihan.png",
     // 备案
     record: "蜀ICP备2021030835号",
-    recordLink: "ICP 备案指向链接",
-    cyberSecurityRecord: "公安部备案文案",
-    cyberSecurityLink: "公安部备案指向链接",
     // 项目开始时间，只填写年份
-    startYear: "2023",
+    startYear: "2022",
   },
   // markdown 配置
   markdown: {

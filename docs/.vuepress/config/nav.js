@@ -5,34 +5,54 @@ module.exports = [
         "icon": "reco-home"
     },
     {
-        "text": "Go",
-        "icon": "reco-document",
-        "link": "/categories/go/"
+        "text": "时间线",
+        "link": "/timeline/",
+        "icon": "reco-date"
     },
     {
-        "text": "Java",
-        "icon": "reco-document",
-        "link": "/categories/Java/"
+        "text": "工具箱",
+        "icon": "iconfont icon-gongju",
+        "items": [
+            {
+                "text": "PDF转Word",
+                "link": "https://xpdf.net/?s"
+            },
+            {
+                "text": "在线工具箱",
+                "link": "https://tool.lu/"
+            },
+            {
+                "text": "音乐格式转换",
+                "link": "https://openyyy.com/"
+            },
+            {
+                "text": "logo 生成",
+                "link": "https://www.shopify.com/tools/logo-maker"
+            },
+            {
+                "text": "虚拟短信接收",
+                "link": "https://sms-activate.ru/cn/"
+            },
+            {
+                "text": "代码变量名称翻译",
+                "link": "https://fanyi.phpstudyhelper.com/"
+            },
+        ]
     },
     {
-        "text": "MySQL",
-        "icon": "reco-document",
-        "link": "/categories/MySQL/"
+        "text": "关于",
+        "icon": "reco-account",
+        "items": [
+            {
+                "text": "github",
+                "icon": "reco-github",
+                "link": "https://github.com/yixihan"
+            },
+            {
+                "text": "gitee",
+                "icon": "reco-mayun",
+                "link": "https://gitee.com/yixihan"
+            },
+        ]
     },
-    {
-        "text": "Nginx",
-        "icon": "reco-document",
-        "link": "/categories/Nginx/"
-    },
-    {
-        "text": "RabbitMQ",
-        "icon": "reco-document",
-        "link": "/categories/RabbitMQ/"
-    },
-    {
-        "text": "面经",
-        "icon": "reco-document",
-        "link": "/categories/面经/"
-    },
-
 ]

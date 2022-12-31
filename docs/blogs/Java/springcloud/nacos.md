@@ -2,6 +2,7 @@
 title: SpringCloud Alibaba Nacos
 date: 2022-10-30T17:55:28+08:00
 sidebar: 'auto'
+sticky: 1
 categories:
 - Java
 tags:
