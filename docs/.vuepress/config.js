@@ -25,7 +25,7 @@ module.exports = {
     // 导航栏配置
     nav: nav,
     // 导航栏 logo
-    logo: "./pubilc/yixihan.png",
+    logo: "/yixihan.png",
     type: "blog",
     blogConfig: {
       category: {
@@ -47,7 +47,7 @@ module.exports = {
     searchMaxSuggestions: 10,
     lastUpdated: "最后更新时间",
     author: "易曦翰",
-    authorAvatar: "./pubilc/yixihan.png",
+    authorAvatar: "/yixihan.png",
     // 备案
     record: "蜀ICP备2021030835号",
     recordLink: "ICP 备案指向链接",
