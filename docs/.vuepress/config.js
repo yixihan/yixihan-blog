@@ -2,6 +2,7 @@ const nav = require("./config/nav");
 const friendLink = require("./config/friendLink");
 const head = require("./config/head");
 const sidebar = require("./config/sidebar");
+const pluginConfig = require("./config/pluginConfig");
 
 module.exports = {
   // 标签
@@ -35,6 +36,7 @@ module.exports = {
     sidebar: sidebar,
     // 在所有页面中启用自动生成子侧边栏，原 sidebar 仍然兼容
     subSidebar: "auto",
+    plugins: pluginConfig,
     search: true,
     searchMaxSuggestions: 10,
     lastUpdated: "最后更新时间",
