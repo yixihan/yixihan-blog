@@ -13,6 +13,8 @@ module.exports = {
   head: head,
   // 博客主题
   theme: "reco",
+  // 插件配置
+  plugins: pluginConfig,
   // 主题配置
   themeConfig: {
     // 导航栏配置
@@ -36,7 +38,6 @@ module.exports = {
     sidebar: sidebar,
     // 在所有页面中启用自动生成子侧边栏，原 sidebar 仍然兼容
     subSidebar: "auto",
-    plugins: pluginConfig,
     search: true,
     searchMaxSuggestions: 10,
     lastUpdated: "最后更新时间",

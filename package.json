@@ -26,11 +26,13 @@
     "vuepress": "^1.9.7",
     "vuepress-plugin-dynamic-title": "^1.0.0",
     "vuepress-plugin-go-top": "^1.0.4",
+    "vuepress-plugin-live2d": "^0.0.7",
     "vuepress-plugin-meting": "^0.3.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.0.0",
     "vuepress-plugin-comment": "^0.7.3",
+    "vuepress-plugin-cursor-effects": "^1.1.6",
     "vuepress-theme-reco": "^1.6.11"
   }
 }
