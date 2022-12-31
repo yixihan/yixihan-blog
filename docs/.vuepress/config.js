@@ -49,7 +49,7 @@ module.exports = {
     author: "易曦翰",
     authorAvatar: "./pubilc/yixihan.png",
     // 备案
-    record: "ICP 备案文案",
+    record: "蜀ICP备2021030835号",
     recordLink: "ICP 备案指向链接",
     cyberSecurityRecord: "公安部备案文案",
     cyberSecurityLink: "公安部备案指向链接",
