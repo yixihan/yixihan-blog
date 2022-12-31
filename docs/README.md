@@ -1,7 +1,7 @@
 ---
 home: true
 heroText: 欢迎来到易曦翰的小屋
-tagline: A simple and beautiful vuepress blog theme.
+tagline: 花开亦花散
 # heroImage: /hero.png
 # heroImageStyle: {
 #   maxWidth: '600px',

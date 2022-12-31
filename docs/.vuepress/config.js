@@ -1,13 +1,11 @@
+const nav = require("./config/nav");
+
+
+
 module.exports = {
   "title": "易曦翰",
   "description": "花开亦花散",
-  // "base": './',
   // "dest": "public",
-  "locales": {
-    '/': {
-      lang: 'zh-CN'
-    }
-  },
   "head": [
     [
       "link",
@@ -26,47 +24,8 @@ module.exports = {
   ],
   "theme": "reco",
   "themeConfig": {
-    "nav": [
-      {
-        "text": "Home",
-        "link": "/",
-        "icon": "reco-home"
-      },
-      {
-        "text": "TimeLine",
-        "link": "/timeline/",
-        "icon": "reco-date"
-      },
-      {
-        "text": "Docs",
-        "icon": "reco-message",
-        "items": [
-          {
-            "text": "vuepress-reco",
-            "link": "/docs/theme-reco/"
-          }
-        ]
-      },
-      {
-        "text": "Contact",
-        "icon": "reco-message",
-        "items": [
-          {
-            "text": "GitHub",
-            "link": "https://github.com/recoluan",
-            "icon": "reco-github"
-          }
-        ]
-      }
-    ],
-    "sidebar": {
-      "/docs/theme-reco/": [
-        "",
-        "theme",
-        "plugin",
-        "api"
-      ]
-    },
+    // 导航栏配置
+    "nav": nav,
     "type": "blog",
     "blogConfig": {
       "category": {
@@ -78,31 +37,31 @@ module.exports = {
         "text": "Tag"
       }
     },
+    // 友链配置
     "friendLink": [
-      {
-        "title": "午后南杂",
-        "desc": "Enjoy when you can, and endure when you must.",
-        "email": "1156743527@qq.com",
-        "link": "https://www.recoluan.com"
-      },
-      {
-        "title": "vuepress-theme-reco",
-        "desc": "A simple and beautiful vuepress Blog & Doc theme.",
-        "avatar": "https://vuepress-theme-reco.recoluan.com/icon_vuepress_reco.png",
-        "link": "https://vuepress-theme-reco.recoluan.com"
-      }
     ],
+    // 自定义配置侧边栏
+    "sidebar": {},
+    subSidebar: 'auto', //在所有页面中启用自动生成子侧边栏，原 sidebar 仍然兼容,
     "logo": "/logo.png",
     "search": true,
     "searchMaxSuggestions": 10,
-    "sidebar": "auto",
     "lastUpdated": "最后更新时间",
     "author": "易曦翰",
     "authorAvatar": "/avatar.png",
+    // 备案号,
     "record": "xxxx",
-    "startYear": "2017"
+    // 开始年
+    "startYear": "2023"
   },
+  // markdown 配置
   "markdown": {
     "lineNumbers": true
-  }
+  },
+  // 多语言配置
+  "locales": {
+    '/': {
+      lang: 'zh-CN'
+    }
+  },
 }
