@@ -21,10 +21,6 @@ tags:
 - 环境搭建
 ---
 
-:::tip
-本指南所用机器为腾讯云服务器, 操作系统为 `OpenCloudOS`
-包含常见编程语言环境(`Java`, `C`, `C++`, `NodeJS`, `Python3`, `Go`),`Docker`,`Redis`,`MySQL`,`Nginx`, `RabbitMQ`等搭建指南
-:::
 
 # Linux 开发环境搭建指南
 
