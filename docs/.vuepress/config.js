@@ -38,6 +38,11 @@ module.exports = {
     sidebar: sidebar,
     // 在所有页面中启用自动生成子侧边栏，原 sidebar 仍然兼容
     subSidebar: "auto",
+    // 评论配置 https://valine.js.org/quickstart.html
+    valineConfig: {
+      appId: 'wcppcA6Z8EqsvzXnHmQNBrim-gzGzoHsz',// your appId
+      appKey: 'OoQgBxM0NQumgDTpHCENVIW6', // your appKey
+    },
     search: true,
     searchMaxSuggestions: 10,
     lastUpdated: "最后更新时间",
