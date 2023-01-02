@@ -6,17 +6,16 @@ set -e
 # 生成静态文件
 npm run docs:build
 
-# commit to master
-git add -A
-git commit -m "update"
-git push
-
 # 进入生成的文件夹
 cd docs/.vuepress/dist
 
 # 如果是发布到自定义域名
 echo 'daily.yixihan.chat' > CNAME
 
+# 删除 gh-pages
+git push origin -d gh-pages
+
+# 创建并推送 gh-pages
 git init
 git add -A
 git commit -m 'deploy'
