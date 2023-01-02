@@ -1,5 +1,5 @@
 ---
-title: win 编程环境搭建
+title: windows编程环境搭建
 date: 2022-12-31
 sidebar: 'auto'
 sticky: 3

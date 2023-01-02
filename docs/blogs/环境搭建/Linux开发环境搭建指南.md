@@ -1,5 +1,5 @@
 ---
-title: linux 编程环境搭建
+title: linux编程环境搭建
 date: 2023-01-02
 sidebar: 'auto'
 sticky: 4
@@ -1772,7 +1772,7 @@ systemctl restart rabbitmq-server
 
 ## Nginx 安装
 
-
+待更新
 
 
 
@@ -1846,3 +1846,8 @@ db.password=123456
 #### 运行
 
 ![image-20230102014651289](https://typora-oss.yixihan.chat//img/202301020146363.png)
+
+
+### 集群安装
+
+待更新
