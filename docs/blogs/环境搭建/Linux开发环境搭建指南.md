@@ -209,7 +209,8 @@ java -version
 
 # 有则卸载
 rpm -qa|grep jdk
-rpm -e --nodeps xxx(检测出来的jdk名称)
+# xxx => 检测出来的jdk名称
+rpm -e --nodeps xxx
 ```
 
 
@@ -439,6 +440,8 @@ python3 -V
 
 
 ### 软件包管理器安装 Python
+
+**通过包管理器安装的py版本一般不太高,需要高版本的建议自己编译安装**
 
 ```shell
 # dnf
@@ -796,7 +799,7 @@ docker images
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
-  "registry-mirrors": ["https://mfcosi6s.mirror.aliyuncs.com"]
+  "registry-mirrors": ["https://<你的ID>.mirror.aliyuncs.com"]
 }
 EOF
 sudo systemctl daemon-reload
@@ -1244,7 +1247,7 @@ docker network create redis --subnet 172.38.0.0/16
 
 > tips
 
-如果报这个错, 是因为重启过防火墙的愿意, 重启 `docker` 即可
+如果报这个错, 是因为重启过防火墙的原因, 重启 `docker` 即可
 
 ![image-20230106145119231](https://typora-oss.yixihan.chat//img/202301061451319.png)
 
