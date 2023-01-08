@@ -49,7 +49,7 @@ Linux 防火墙有多种, 自带的可能是 `ufw` / `iptables` / `Firewall`
 ufw disable
 
 # Firewall
-sytemctl disable firewalld
+systemctl disable firewalld
 
 # 关闭防火墙
 service iptables stop
@@ -74,6 +74,7 @@ firewall-cmd --permanent --zone=public --remove-port=80/tcp
 systemctl start firewalld.service
 # 重启防火墙
 systemctl restart firewalld.service
+
 service firewalld restart
 firewall-cmd --reload
 # 关闭防火墙
@@ -81,6 +82,10 @@ systemctl stop firewalld.service
 # 查看状态
 systemctl status firewalld.service
 firewall-cmd --state
+# 开机禁用防火墙
+systemctl disable firewalld
+# 开机启用防火墙
+systemctl enable firewalld
 ```
 
 
@@ -147,7 +152,7 @@ service iptables save
 vim /etc/ssh/sshd_config
 ```
 
-![image-20221229194444280](https://typora-oss.yixihan.chat//img/202212291944359.png)
+![image-20221229194444280](https://typora-oss.yixihan.chat//img/202301051040650.png)
 
 
 
@@ -161,7 +166,7 @@ systemctl restart sshd
 /etc/init.d/ssh restart
 ```
 
-![image-20221229195218687](https://typora-oss.yixihan.chat//img/202212291952728.png)
+![image-20221229195218687](https://typora-oss.yixihan.chat//img/202301051040639.png)
 
 没有报错就是生效
 
@@ -238,13 +243,105 @@ source /etc/profile
 
 > 安装 jdk
 
-![image-20230101211124947](https://typora-oss.yixihan.chat//img/202301012111029.png)
+![image-20230101211124947](https://typora-oss.yixihan.chat//img/202301051040628.png)
 
 
 
 > 检测 jdk
 
-![image-20230101211143753](https://typora-oss.yixihan.chat//img/202301012111795.png)
+![image-20230101211143753](https://typora-oss.yixihan.chat//img/202301051040638.png)
+
+
+
+### Docker JDK 构建
+
+#### Dockerfile
+
+```shell
+# 基础镜像为 centos
+FROM centos
+# 维护者 
+MAINTAINER yixihan
+# 将jdk压缩包添加到容器的 /root 目录，解压后目录名称为jdk1.8.0_211
+ADD jdk-8u291-linux-x64.tar.gz /root
+# 配置JAVA_HOME环境变量
+ENV JAVA_HOME /root/jdk1.8.0_291/
+# 将JAVA_HOME/bin 添加至PATH环境变量
+ENV PATH $JAVA_HOME/bin:$PATH
+# 启动容器执行的命令，仅用于验证安装配置是否正确，生产环境使用需注释后再build
+ENTRYPOINT ["java","-version"]
+```
+
+
+
+## Maven 安装
+
+### 解压
+
+```shell
+tar -zxvf apache-maven-3.8.7-bin.tar.gz
+mv apache-maven-3.8.7 /opt/
+cd /opt/apache-maven-3.8.7/
+```
+
+
+
+### 配置配置文件
+
+修改配置文件 `settings.xml`
+
+```shell
+vim conf/settings.xml
+```
+
+
+
+> 修改镜像
+
+```xml
+<!-- 阿里云maven镜像 -->
+<mirror>
+    <id>aliyunmaven</id>
+    <mirrorOf>*</mirrorOf>
+    <name>阿里云公共仓库</name>
+    <url>https://maven.aliyun.com/repository/public</url>
+</mirror>
+
+```
+
+
+
+> 添加仓库
+
+创建文件 `maven-repo`
+
+```xml
+<localRepository>/opt/apache-maven-3.8.7/maven-repo</localRepository>
+```
+
+
+
+### 配置环境变量
+
+```shell
+vim /etc/profile
+
+# Maven 环境配置
+export PATH=${PATH}:/opt/apache-maven-3.8.7/bin
+
+# 保存
+source /etc/profile
+```
+
+
+
+### 测试是否安装成功
+
+```shell
+mvn --version
+```
+
+![image-20230106151144731](https://typora-oss.yixihan.chat//img/202301061511836.png)
 
 
 
@@ -255,7 +352,7 @@ source /etc/profile
 yum -y install gcc
 yum -y install gcc-c++
 # dnf 安装
-dnf -y install gcc-c++ gcc make
+dnf -y install gcc-c++ gcc
 # apt 安装
 ```
 
@@ -273,7 +370,7 @@ g++ -v
 
 > 验证是否安装成功
 
-![image-20230101215019551](https://typora-oss.yixihan.chat//img/202301012228511.png)
+![image-20230101215019551](https://typora-oss.yixihan.chat//img/202301051040637.png)
 
 
 
@@ -303,6 +400,15 @@ cd /opt/Python-3.10.0/
 
 
 
+### 安装模块
+
+```shell
+yum install bzip2-devel 
+dnf instal bzip2-devel 
+```
+
+
+
 ### 编译安装
 
 ```shell
@@ -328,7 +434,7 @@ python3 -V
 
 > 检测安装是否成功
 
-![image-20230101223958629](https://typora-oss.yixihan.chat//img/202301012239674.png)
+![image-20230101223958629](https://typora-oss.yixihan.chat//img/202301051040635.png)
 
 
 
@@ -377,7 +483,7 @@ cd /opt/go
 vim /etc/profile
 
 # go 环境配置
-PATH=$PATH:/opt/go/bin
+export PATH=$PATH:/opt/go/bin
 
 # 保存
 source /etc/profile
@@ -395,7 +501,7 @@ go version
 
 > 检测安装是否成功
 
-![image-20230101224521675](https://typora-oss.yixihan.chat//img/202301012245716.png)
+![image-20230101224521675](https://typora-oss.yixihan.chat//img/202301051040979.png)
 
 
 
@@ -436,6 +542,21 @@ make & make install
 
 
 
+> ModuleNotFoundError: No module named '_bz2'
+
+```shell
+yum install bzip2-devel 
+dnf instal bzip2-devel 
+
+# 重新构建 python
+/opt/Python-3.10.0
+./configure && make && make install
+```
+
+
+
+
+
 ### 配置环境变量
 
 ```shell
@@ -461,7 +582,7 @@ node -v
 
 > 检测是否安装成功
 
-![image-20230102011049056](https://typora-oss.yixihan.chat//img/202301020110125.png)
+![image-20230102011049056](https://typora-oss.yixihan.chat//img/202301051040016.png)
 
 
 
@@ -483,7 +604,39 @@ yum -y install git-core
 
 > 检测是否安装成功
 
-![image-20230102002249814](https://typora-oss.yixihan.chat//img/202301020110029.png)
+![image-20230102002249814](https://typora-oss.yixihan.chat//img/202301051040995.png)
+
+
+
+### 配置用户名密码
+
+```shell
+git config --global user.name yixihan
+git config --global user.email yixihan20010617@gmail.com
+git config --global --list
+```
+
+![image-20230107093611696](https://typora-oss.yixihan.chat//img/202301070936801.png)
+
+
+
+### 配置 ssh
+
+```shell
+ssh-keygen -t rsa
+```
+
+![image-20230107093619393](https://typora-oss.yixihan.chat//img/202301070936469.png)
+
+
+
+### 添加 ssh
+
+```shell
+cat ~/.ssh/id_rsa.pub
+```
+
+
 
 
 
@@ -516,7 +669,7 @@ cat /etc/redhat-release
 
 > 检测
 
-![image-20230101212420151](https://typora-oss.yixihan.chat//img/202301012124189.png)
+![image-20230101212420151](https://typora-oss.yixihan.chat//img/202301051040009.png)
 
 
 
@@ -555,6 +708,7 @@ docker-engine
 ```shell
 # 正确推荐使用国内的
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+dnf config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
 
 
@@ -574,6 +728,8 @@ dnf makecache
 
 ```shell
 yum -y install docker-ce docker-ce-cli containerd.io
+
+dnf install docker-ce docker-ce-cli containerd.io --allowerasing
 ```
 
 
@@ -606,19 +762,19 @@ docker images
 
 > 获取 docker 版本
 
-![image-20230101213142129](https://typora-oss.yixihan.chat//img/202301012131180.png)
+![image-20230101213142129](https://typora-oss.yixihan.chat//img/202301051040040.png)
 
 
 
 > 运行 docker 容器
 
-![image-20230101213217221](https://typora-oss.yixihan.chat//img/202301012132273.png)
+![image-20230101213217221](https://typora-oss.yixihan.chat//img/202301051040042.png)
 
 
 
 > 查看 docker 镜像列表
 
-![image-20230101213231882](https://typora-oss.yixihan.chat//img/202301012132924.png)
+![image-20230101213231882](https://typora-oss.yixihan.chat//img/202301051040303.png)
 
 
 
@@ -632,7 +788,7 @@ docker images
 - 七牛云加速器：**https://reg-mirror.qiniu.com**
 
 [阿里云镜像获取地址](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors)，登录后，左侧菜单选中镜像加速器就可以看到你的专属地址了
-![image-20230101213833745](https://typora-oss.yixihan.chat//img/202301012138805.png)
+![image-20230101213833745](https://typora-oss.yixihan.chat//img/202301051040247.png)
 
 
 
@@ -695,7 +851,7 @@ g++ -v
 
 > 版本检查
 
-![image-20230101215019551](https://typora-oss.yixihan.chat//img/202301012150606.png)
+![image-20230101215019551](https://typora-oss.yixihan.chat//img/202301051040347.png)
 
 
 
@@ -1076,6 +1232,119 @@ aof-rewrite-incremental-fsync yes
 
 
 
+## Docker 搭建 Redis 集群
+
+### 创建 redis 网卡
+
+```shell
+docker network create redis --subnet 172.38.0.0/16
+```
+
+
+
+> tips
+
+如果报这个错, 是因为重启过防火墙的愿意, 重启 `docker` 即可
+
+![image-20230106145119231](https://typora-oss.yixihan.chat//img/202301061451319.png)
+
+
+
+> 查看创建的网卡
+
+```shell
+docker network ls
+```
+
+![image-20230106145204425](https://typora-oss.yixihan.chat//img/202301061452490.png)
+
+
+
+### 创建redis服务
+
+> tips
+
+`requirepass your_password` 可选, 为设置密码所用
+
+```shell
+for port in $(seq 1 6);
+do
+mkdir -p /mydata/redis/node-${port}/conf
+touch /mydata/redis/node-${port}/conf/redis.conf
+cat << EOF >>/mydata/redis/node-${port}/conf/redis.conf
+port 6379
+bind 0.0.0.0
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-announce-ip 172.38.0.1${port}
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+requirepass your_password
+appendonly yes
+EOF
+done
+```
+
+
+
+### 启动 redis 容器
+
+```shell
+for port in $(seq 1 6);
+do
+docker run -p 637${port}:6379 -p 1637${port}:16379 --name redis-${port} \
+-v /mydata/redis/node-${port}/data:/data \
+-v /mydata/redis/node-${port}/conf/redis.conf:/etc/redis/redis.conf \
+-d --net redis --ip 172.38.0.1${port} redis:6.2.5 redis-server /etc/redis/redis.conf
+done
+```
+
+![image-20230106145417508](https://typora-oss.yixihan.chat//img/202301061454598.png)
+
+
+
+### 创建 redis 集群
+
+```shell
+# 进入 redis-1
+docker exec -it redis-1 /bin/bash
+
+# 创建集群
+redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379 172.38.0.15:6379 172.38.0.16:6379 --cluster-replicas 1
+```
+
+![image-20230106145514029](https://typora-oss.yixihan.chat//img/202301061455309.png)
+
+
+
+### 查看集群
+
+```shell
+redis-cli -c
+cluster nodes
+```
+
+
+
+![image-20230106145540630](https://typora-oss.yixihan.chat//img/202301061455756.png)
+
+
+
+### 常用命令
+
+> 重启服务
+
+```shell
+for port in $(seq 1 6);
+do
+docker restart redis-${port}
+done
+```
+
+
+
+
+
 ## MySQL 安装
 
 ### 数据库安装
@@ -1114,7 +1383,7 @@ mysql --version
 
 > 检查是否安装成功
 
-![image-20230102003955126](https://typora-oss.yixihan.chat//img/202301020039201.png)
+![image-20230102003955126](https://typora-oss.yixihan.chat//img/202301051040329.png)
 
 
 
@@ -1122,7 +1391,7 @@ mysql --version
 
 ##### Error: Unable to find a match: mysql-community-server
 
-![image-20230102002707111](https://typora-oss.yixihan.chat//img/202301020027175.png)
+![image-20230102002707111](https://typora-oss.yixihan.chat//img/202301051040356.png)
 
 ```shell
 # 解决方法
@@ -1134,7 +1403,7 @@ yum -y install mysql-community-server
 
 ##### GPG check FAILED
 
-![image-20220303190048146](https://typora-oss.yixihan.chat//img/202301020028903.png)
+![image-20220303190048146](https://typora-oss.yixihan.chat//img/202301051040351.png)
 
 ```shell
 # 解决方法
@@ -1146,7 +1415,7 @@ yum -y install mysql-community-server
 
 ##### file /etc/my.cnf from install of mysql-community-server-5.7.40-1.el7.x86_64 conflicts with file from package mariadb-connector-c-config-3.1.11-2.oc8.1.noarch
 
-![image-20230102003815447](https://typora-oss.yixihan.chat//img/202301020038559.png)
+![image-20230102003815447](https://typora-oss.yixihan.chat//img/202301051040576.png)
 
 ```shell
 # 解决方法:删除冲突的包
@@ -1158,7 +1427,7 @@ yum remove mariadb-connector-c-config.noarch
 
 > yum list
 
-![image-20230102003850919](https://typora-oss.yixihan.chat//img/202301020038981.png)
+![image-20230102003850919](https://typora-oss.yixihan.chat//img/202301051040538.png)
 
 
 
@@ -1200,15 +1469,20 @@ systemctl start mysqld.service
 systemctl status mysqld.service
 ```
 
-![image-20230102004026602](https://typora-oss.yixihan.chat//img/202301020040666.png)
+![image-20230102004026602](https://typora-oss.yixihan.chat//img/202301051040629.png)
 
 
 
 #### 修改 mysql 配置
 
 ```shell
+mv /etc/my.cnf /etc/my.cnf.example
 vim /etc/my.cnf
+```
 
+
+
+```shell
 [client]
 # 端口号
 port = 1617
@@ -1287,10 +1561,9 @@ explicit_defaults_for_timestamp = true
 
 ```shell
 grep "password" /var/log/mysqld.log 
-*##hJX1R%7,0
 ```
 
-![image-20230102004112450](https://typora-oss.yixihan.chat//img/202301020041508.png)
+![image-20230102004112450](https://typora-oss.yixihan.chat//img/202301051040630.png)
 
 
 
@@ -1301,6 +1574,16 @@ grep "password" /var/log/mysqld.log
 ```shell
 mysql -uroot -p
 ```
+
+
+
+#### 修改密码
+
+```shell
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
+```
+
+
 
 
 
@@ -1318,21 +1601,13 @@ status
 
 > 查看端口号
 
-![image-20230102005108019](https://typora-oss.yixihan.chat//img/202301020051104.png)
+![image-20230102005108019](https://typora-oss.yixihan.chat//img/202301051040633.png)
 
 
 
 > 查看编码集
 
-![image-20230102005144204](https://typora-oss.yixihan.chat//img/202301020051307.png)
-
-
-
-#### 修改密码
-
-```shell
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
-```
+![image-20230102005144204](https://typora-oss.yixihan.chat//img/202301051040696.png)
 
 
 
@@ -1357,11 +1632,24 @@ exit;
 
 开放Linux防火墙对应端口或服务器安全组对应端口
 
+```shell
+# 开启端口 永久
+firewall-cmd --permanent --zone=public --add-port=3306/tcp
+# 重启防火墙
+systemctl restart firewalld.service
+```
+
+
+
 
 
 #### 测试连接
 
-![image-20230102005432685](https://typora-oss.yixihan.chat//img/202301020054753.png)
+> tips
+
+虚拟机上的 MySQL 连接 DataGrip 时需在高级里设置 `useSSL = FALSE`
+
+![image-20230102005432685](https://typora-oss.yixihan.chat//img/202301051040811.png)
 
 
 
@@ -1717,7 +2005,7 @@ rabbitmq-plugins enable rabbitmq_management
 
 > 查看服务状态
 
-![image-20230102011704188](https://typora-oss.yixihan.chat//img/202301020117267.png)
+![image-20230102011704188](https://typora-oss.yixihan.chat//img/202301051040835.png)
 
 
 
@@ -1766,13 +2054,117 @@ systemctl restart rabbitmq-server
 
 > 检测插件是否安装成功
 
-![image-20220115101919856](https://typora-oss.yixihan.chat//img/202301020124666.png)
+![image-20220115101919856](https://typora-oss.yixihan.chat//img/202301051040890.png)
 
 
 
 ## Nginx 安装
 
-待更新
+### 环境准备
+
+```shell
+# 安装gcc
+dnf -y install gcc-c++ gcc make
+
+# 安装 PCRE pcre-devel
+dnf install -y pcre pcre-devel
+
+# 安装 zlib
+dnf install -y zlib zlib-devel
+
+# 安装 Open SSL
+dnf install -y openssl openssl-devel
+```
+
+
+
+### 安装 pcre
+
+[下载地址](http://downloads.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.gz)
+
+
+
+```shell
+# 解压
+tar -zxvf pcre-8.35.tar.gz
+mv pcre-8.35 /opt/
+cd /opt/pcre-8.35/
+
+# 编译安装
+./configure && make && make instal
+
+# 查看版本
+pcre-config --version
+```
+
+
+
+
+
+### 解压
+
+```shell
+tar -zxvf nginx-1.22.1.tar.gz
+mv nginx-1.22.1 /opt/
+cd /opt/nginx-1.22.1
+```
+
+
+
+### 编译安装
+
+```shell
+./configure \
+--prefix=/usr/local/nginx \
+--user=yixihan \
+--with-http_ssl_module \
+--with-http_gzip_static_module \
+--http-client-body-temp-path=/usr/local/nginx/tmp/client/ \
+--http-proxy-temp-path=/usr/local/nginx/tmp/proxy/ \
+--http-fastcgi-temp-path=/usr/local/nginx/tmp/fcgi/ \
+--with-poll_module \
+--with-file-aio \
+--with-http_realip_module \
+--with-http_addition_module \
+--with-http_addition_module \
+--with-http_random_index_module \
+--with-http_stub_status_module \
+--http-uwsgi-temp-path=/usr/local/nginx/uwsgi_temp \
+--http-scgi-temp-path=/usr/local/nginx/scgi_temp \
+--with-pcre=/opt/pcre-8.35/ \
+--with-stream
+
+make && make install 
+```
+
+
+
+### 测试是否安装成功
+
+```shell
+nginx -V
+```
+
+
+
+> 测试是否安装成功
+
+![image-20230106122552528](https://typora-oss.yixihan.chat//img/202301061225665.png)
+
+
+
+### 常用命令
+
+```shell
+# 开启 nginx
+systemctl start nginx
+# 关闭 nginx
+systemctl stop nginx
+# 重启 nginx
+systemctl restart nginx
+# 查看 nginx 状态
+systemctl status nginx
+```
 
 
 
@@ -1820,7 +2212,7 @@ fi
 
 > 根据自己的机器配置来
 
-![image-20230102012954254](https://typora-oss.yixihan.chat//img/202301020129348.png)
+![image-20230102012954254](https://typora-oss.yixihan.chat//img/202301051040928.png)
 
 
 
@@ -1845,9 +2237,535 @@ db.password=123456
 
 #### 运行
 
-![image-20230102014651289](https://typora-oss.yixihan.chat//img/202301020146363.png)
+![image-20230102014651289](https://typora-oss.yixihan.chat//img/202301051040957.png)
 
 
 ### 集群安装
 
 待更新
+
+
+
+## Sentinel docker 搭建
+
+[sentinel 下载地址](https://github.com/alibaba/sentinel/releases)
+
+
+
+### Dockerfile
+
+```shell
+FROM java:8
+EXPOSE 8888
+
+ADD *.jar  /app.jar
+RUN bash -c 'touch /app.jar' cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+
+
+### 打包 Sentinel 镜像
+
+```shell
+docker build -t sentinel-dashboard:[TAG] .
+```
+
+
+
+### 运行 Sentinel 镜像
+
+```shell
+docker run -d  -p 8888:8080  --name=sentinel --restart=always sentinel-dashboard:[TAG]
+```
+
+
+
+```shell
+访问地址 : http://host:8888/
+用户名: sentinel
+密码: sentinel
+```
+
+
+
+
+
+## Jenkins 搭建
+
+本教程采用 `docker` 搭建 `jenkins`， 并将部署的服务运行在宿主机 `docker`上
+
+
+
+### docker 运行 Jenkins
+
+```shell
+docker run -u root -d -m 1024m \
+--restart=always \
+-p 8099:8080 -p 50099:50000 --privileged \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v $(which docker):/bin/docker \
+-v /usr/lib64/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7 \
+-v /home/jenkins:/var/jenkins_home \
+-v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime \
+--name jenkins jenkinsci/blueocean
+```
+
+> 参数讲解
+
+- -u root : 以宿主机 root 用户的权限运行 Jenkins
+
+- -m 1024m : 限制 Jenkins 内存大小
+
+- --restart=always : 能够使我们在重启 docker 时，自动启动相关容器
+
+- -p 8099:8080 -p 50099:50000 : 对外映射接口
+
+- --privileged : 让 Jenkins 容器中的 root 用户拥有真正的宿主机 root 权限
+
+- -v /var/run/docker.sock:/var/run/docker.sock : 容器中的进程通过它与 docker 守护进程进行通信
+
+- -v $(which docker):/usr/bin/docker : 将宿主机的docker命令挂载到容器中
+  $(which docker) 是docker命令所在位置, 一般在/usr/bin/docker,用$(which docker)就行
+
+- /usr/lib64/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7 : Docker命令执行所依赖的函数库
+
+  centos7 / centos8 中该文件路径为/usr/lib64/libltdl.so.7
+
+  ubuntu中该文件路径为/usr/lib/x86_64-linux-gnu/libltdl.so.7
+
+- /home/jenkins:/var/jenkins_home : `/home/jenkins` 为挂载在宿主机 Jenkins 目录位置
+
+- -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime : 挂载宿主机的时区, 让 Jenkins 拥有正确的时间显示
+
+
+
+#### 防火墙配置
+
+打开对应端口防火墙
+
+
+
+#### 复制一份 maven 到  Jenkins 目录
+
+```shell
+cp -r /opt/apache-maven-3.8.7 /home/jenkins
+```
+
+
+
+![image-20230106152252054](https://typora-oss.yixihan.chat//img/202301061522183.png)
+
+
+
+
+
+#### 查询 Jenkins 内是否可以执行宿主机中的 docker
+
+```shell
+# 进入容器
+docker exec -it [容器id/容器name] /bin/bash
+docker exec -it jenkins /bin/bash
+
+# 执行命令
+docker ps
+```
+
+
+
+### Jenkins 镜像配置
+
+
+
+####  前往 Jenkins 在宿主机挂载的目录
+
+```shell
+cd /home/jenkins
+```
+
+
+
+#### 修改 hudson.model.UpdateCenter.xml 文件
+
+修改为清华源
+
+```shell
+vim hudson.model.UpdateCenter.xml
+
+# 修改 sites - site - url
+https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
+```
+
+
+
+![image-20230105104602442](https://typora-oss.yixihan.chat//img/202301051046519.png)
+
+
+
+#### 修改 default.json
+
+要修改的地址有两部分：
+
+- 插件查找搜索地址（*默认为 http://www.google.com/*），我们更换成百度的地址；
+- 插件下载地址（*默认为 https://updates.jenkins.io/download*），我们更换成国内镜像地址；
+
+```shell
+cd updates
+
+sed -i 's#https://updates.jenkins.io/download#https://mirrors.tuna.tsinghua.edu.cn/jenkins#g' default.json
+sed -i 's#http://www.google.com#https://www.baidu.com#g' default.json
+```
+
+
+
+#### 重启 Jenkins
+
+```shell
+docker restart [容器id/容器name]
+docker restart jenkins
+```
+
+
+
+### Jenkins 配置
+
+为方便, Jenkins 自动部署最好使用 gitee (国内服务器, 不用担心网络问题)
+
+
+
+#### 初始化 Jenkins
+
+![image-20230106152537105](https://typora-oss.yixihan.chat//img/202301061525358.png)
+
+
+
+> 密码获取
+
+```shell
+cat /home/jenkins/secrets/initialAdminPassword
+```
+
+
+
+#### 安装社区推荐插件
+
+![image-20230106152827172](https://typora-oss.yixihan.chat//img/202301061528390.png)
+
+
+
+#### 创建管理员
+
+![image-20230106153340176](https://typora-oss.yixihan.chat//img/202301061533417.png)
+
+
+
+#### 实例配置
+
+![image-20230106153420752](https://typora-oss.yixihan.chat//img/202301061534982.png)
+
+
+
+#### 插件更新
+
+##### 更新插件
+
+
+
+##### 下载插件
+
+```shell
+# 下载插件列表
+gitee
+```
+
+
+
+##### 坑
+
+插件可能在默认下载或更新之后存在 Jenkins 版本过低而无法加载的问题, 只需要更新 jenkins 即可
+
+若面板没找到自动更新选项,可以手动更新
+
+[Jenkins 下载地址]()
+
+下载之后将这个war包替换容器内的 `/usr/share/jenkins/jenkins.war`
+
+
+
+#### 系统配置
+
+##### Maven 配置
+
+系统配置 -> 全局属性
+
+
+
+```shell
+M2_HOME
+/var/jenkins_home/maven-3.8.7
+ 
+PATH+EXTRA
+/var/jenkins_home/maven-3.8.7/bin
+```
+
+
+
+![image-20230105105749453](https://typora-oss.yixihan.chat//img/202301051057649.png)
+
+
+
+最后保存即可
+
+
+
+##### gitee 配置
+
+系统配置 -> gitee 配置
+
+
+
+> 新增仓库
+
+![image-20230105105942540](https://typora-oss.yixihan.chat//img/202301051059652.png)
+
+输入 gitee 链接 : https://gitee.com/xxx/xxx.git
+
+输入 gitee 域名 : https://gitee.com
+
+选择证书令牌
+
+
+
+> 配置证书令牌
+
+点击添加
+
+![image-20230105110242969](https://typora-oss.yixihan.chat//img/202301051102049.png)
+
+
+
+选择 gitee API 令牌
+
+![image-20230105110423075](https://typora-oss.yixihan.chat//img/202301051104178.png)
+
+
+
+获取 gitee API 令牌 : [gitee API 令牌获取地址](https://gitee.com/profile/personal_access_tokens)
+
+获取之后即可添加保存
+
+
+
+> 最终配置效果如下
+
+![image-20230105105910099](https://typora-oss.yixihan.chat//img/202301051059219.png)
+
+
+
+测试连接可行之后保存即可
+
+
+
+
+
+
+
+### 新增 job - 应用
+
+输入描述, 选择 `gitee` 链接
+
+![image-20230106164113043](https://typora-oss.yixihan.chat//img/202301061641334.png)
+
+
+
+#### 源码管理
+
+![image-20230106163941811](https://typora-oss.yixihan.chat//img/202301061639015.png)
+
+
+
+> 账号添加
+
+输入账号密码即可
+
+![image-20230106163858778](https://typora-oss.yixihan.chat//img/202301061638011.png)
+
+
+
+#### 构建步骤
+
+选择执行 `shell`
+
+![image-20230106164027685](https://typora-oss.yixihan.chat//img/202301061640896.png)
+
+
+
+> shell命令
+
+
+
+```shell
+############################################################################################################
+###构建命令
+############################################################################################################
+
+echo $JAVA_HOME
+echo "=============java变量路径:$JAVA_HOME" 
+
+# 项目路径, 一般是项目名
+PROJECT_LOCATION=yibot
+# 模块名
+PROJECT=YiBot
+# 组 ID
+GROUP_ID=com.yixihan
+
+############################maven 打包#####################################
+# 跳转到源代码目录, 执行 maven 命令 (需更改 maven 路径)
+cd /var/jenkins_home/workspace/${PROJECT_LOCATION} && /var/jenkins_home/apache-maven-3.8.7/bin/mvn  clean install -am -pl ${GROUP_ID}:${PROJECT} -Dmaven.test.skip=true
+###########################################################################
+
+############################历史镜像,容器处理#################################
+# docker 镜像表情按
+TAG=`v "+%Y%m%d"`
+# docker镜像名称
+IMAGE_NAME=$PROJECT
+echo "=============查看进程id，然后删除"
+#容器id
+cid=$(docker ps -a | grep $IMAGE_NAME | awk '{print $1}')
+#镜像id
+iid=$(docker images | grep $IMAGE_NAME | awk '{print $3}')
+
+# 判断容器 & 镜像是否存在,如果存在则删除
+
+if [ -n "$cid" ]; then
+echo "存在容器$IMAGE_NAME，cid=$cid,删除容器。。。"
+docker rm -f $cid
+else
+echo "不存在$IMAGE_NAME容器"
+fi
+
+if [ -n "$iid" ]; then
+echo "存在镜像$IMAGE_NAME，iid=$iid,删除容器镜像。。。"
+docker rmi -f $iid
+else
+echo "不存在$IMAGE_NAME镜像"
+fi 
+###########################################################################
+
+############################镜像构建,容器启动#################################
+### 构建容器
+# 跳转到源代码目录
+cd /var/jenkins_home/workspace/${PROJECT_LOCATION}
+# docker 镜像构建命令
+docker build -t $IMAGE_NAME:$TAG .
+echo "=============开始构建镜像$IMAGE_NAME"
+echo "当前docker 所有镜像："
+docker images
+echo "启动容器------->"
+# docker 容器启动命令
+docker run -p 19999:19999 -d --name $IMAGE_NAME $IMAGE_NAME
+echo "启动服务成功"
+###########################################################################
+
+echo "查看启动的所有进程：" 
+docker ps
+```
+
+
+
+> 适用于多模块的构建
+
+![image-20230107135211115](https://typora-oss.yixihan.chat//img/202301071352348.png)
+
+```shell
+############################################################################################################
+###构建命令
+############################################################################################################
+ 
+    echo $JAVA_HOME
+    echo "=============java变量路径:$JAVA_HOME" 
+    # 项目名称, 一般也是项目路径
+    PROJECT_LOCATION=yicode
+    # 组 ID
+    GROUP_ID=com.yixihan
+    ##############################打包###########################################
+    # 跳转到源代码目录, 执行 maven 命令 (打包) (需更改 maven 路径)
+    cd /var/jenkins_home/workspace/${PROJECT_LOCATION}/${PROJECT} && /var/jenkins_home/apache-maven-3.8.7/bin/mvn  clean install -am -pl ${GROUP_ID}:${PROJECT} -Dmaven.test.skip=true
+    ############################################################################
+    
+    #############################删除原有镜像,容器################################
+    TAG=`date "+%Y%m%d"`
+    IMAGE_NAME=$PROJECT
+    echo "=============查看进程id，然后删除"
+    #容器id
+    cid=$(docker ps -a | grep $IMAGE_NAME | awk '{print $1}')
+    #镜像id
+    iid=$(docker images | grep $IMAGE_NAME | awk '{print $3}')
+    if [ -n "$cid" ]; then
+      echo "存在容器$IMAGE_NAME，cid=$cid,删除容器。。。"
+      docker rm -f $cid
+    else
+       echo "不存在$IMAGE_NAME容器"
+    fi
+    if [ -n "$iid" ]; then
+      echo "存在镜像$IMAGE_NAME，iid=$iid,删除容器镜像。。。"
+      docker rmi -f $iid
+    else
+       echo "不存在$IMAGE_NAME镜像"
+    fi 
+    ############################################################################
+ 	
+    ###############################构建镜像,运行容器###############################
+    cd /var/jenkins_home/workspace/${PROJECT_LOCATION}/${PROJECT}
+    docker build -t $IMAGE_NAME:$TAG .
+    echo "=============开始构建镜像$IMAGE_NAME"
+    echo "当前docker 所有镜像："
+    docker images
+    echo "启动容器------->"
+    case $PROJECT in
+    	"yicode-gateway")
+			docker run -p 11000:11000 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-auth")
+			docker run -p 13100:13100 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-user")
+         	docker run -p 14100:14100 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+		"yicode-user-openapi")
+			docker run -p 14200:14200 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-question")
+			docker run -p 15100:15100 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-question-openapi")
+			docker run -p 15200:15200 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+        "yicode-runcode-judge")
+			docker run -p 18100:18100 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-runcode-run")
+         	docker run -p 18200:18200 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-thirdpart")
+			docker run -p 16100:16100 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-thirdpart-openapi")
+			docker run -p 16200:16200 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+        "yicode-message-producer")
+			docker run -p 17100:17100 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+    	"yicode-message-consumer")
+         	docker run -p 18200:18200 -d --restart=always -m 256m -e JAVA_OPTS=’-Xmx256m’ --name $IMAGE_NAME $IMAGE_NAME:$TAG
+            ;;
+		*)
+            echo "error"
+            ;;
+        esac    
+    echo "启动服务成功"
+    ############################################################################
+    echo "查看启动的所有进程：" 
+    docker ps
+```
+
