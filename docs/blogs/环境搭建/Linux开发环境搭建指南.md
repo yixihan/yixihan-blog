@@ -18,6 +18,7 @@ tags:
 - Git
 - RabbitMQ
 - Nacos
+- Jenkins
 - 环境搭建
 ---
 
