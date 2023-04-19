@@ -16,5 +16,17 @@ module.exports = [
         desc: '黑白の世界',
         logo: "https://avatars.githubusercontent.com/u/44086018?v=4",
         link: 'https://y1nhui.com/'
+    },
+    {
+        title: 'CSZongzi',
+        desc: '一只偏前端的全栈粽子',
+        logo: "https://nullptr.zone/avatars/avatar.png",
+        link: 'https://nullptr.zone/'
+    },
+    {
+        title: '甘草熊',
+        desc: '且陶陶，乐尽天真。几时归去，做个闲人。',
+        logo: "https://avatars.githubusercontent.com/u/74760542?v=4",
+        link: 'https://sion.ink/'
     }
 ]
